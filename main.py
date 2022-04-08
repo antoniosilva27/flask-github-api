@@ -1,8 +1,8 @@
-from app import app, db, users, User
+from app import app, db, users, User, create_user
 
 if __name__ == "__main__":
-    users = User(email="drake@drake.com"), User(email="josh@josh.com")
+    create_user('dragoleta')
     db.create_all()
-    db.session.add_all(users)
-    db.session.commit()
+    # db.session.add_all(users)
+    # db.session.commit()
     app.run()
