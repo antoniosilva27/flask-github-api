@@ -1,13 +1,15 @@
-from dataclasses import dataclass
-from flask import Flask, jsonify, render_template, Response, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from dataclasses import dataclass
 import requests
+from dataclasses import dataclass
 
 app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///github.sqlite3'
 db = SQLAlchemy(app)
 
+# @app.route('/')
+# def home():
+#     return render_template('home.html')
 @dataclass
 class User(db.Model):
     id: int
@@ -24,16 +26,11 @@ class User(db.Model):
     followers = db.Column(db.Integer())
     following = db.Column(db.Integer())
 
-# @app.route('/')
-# def home():
-#     return render_template('home.html')
-
-
-# Get all users
-@app.route('/users/', methods=['GET'])
+@app.route('/')
+@app.route('/users/')
 def users():
     users = User.query.all()
-    return jsonify(users)
+    return render_template('users.html', users=users)
 
 #  Get user by id
 @app.route('/user/<id>', methods=['GET'])
@@ -80,16 +77,19 @@ def update_user(id):
         print(e)
         return 'Error'
 
-@app.route('/user/<id>', methods=['DELETE'])
+@app.route('/delete/<int:id>', methods=['DELETE', 'GET'])
 def delete_user(id):
-    user = User.query.filter_by(id=id).first()
-
+    user = User.query.get_or_404(id)
     try:
         db.session.delete(user)
         db.session.commit()
-        return 'deleted successfuly'
+        return users()
     except Exception as e:
-        print(e)
-        return 'Error'
+        flash('Error', e)
 
-    
+if __name__ == "__main__":
+    create_user('dragoleta')
+    # db.create_all()
+    # db.session.add_all(users)
+    # db.session.commit()
+    app.run()
