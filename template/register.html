@@ -1,22 +1,19 @@
-<!-- {% extends "base.html" %}
+{% extends "base.html" %}
 
 
 {% block content %}
     <section class="container-center">
-        <form action="{{ url_for('create_user') }}" method="post">
+        <form action="{{ url_for('create_user') }}" method="POST">
             <div class="page-header">
-                <h1>Cadastrar Cliente</h1>
+                <h1>Register Profile</h1>
             </div>
-            {{ form.csrf_token }}
-                {% for field in form if field.name != "csrf_token" %}
                 <div class="form-group">
-                    {{ render_field(field, type='text') }}
+                    <p> Github Username <input type = "text" name = "username" /></
                 </div>
-                {% endfor %}
             <div>
-                <input type="submit" class="btn btn-primary btn-lg btn-submit" value="Salvar Cadastro"/>
-                <a href="{{ url_for('home.home') }}" ><input type="button" class="btn btn-primary btn-lg" value="Voltar"></a>
+                <input type="submit" class="btn btn-primary btn-lg btn-submit" value="Save Profile"/>
+                <a href="/" ><input type="button" class="btn btn-primary btn-lg" value="Back"></a>
             </div><br>
         </form>
     </section>
-{% endblock %} -->
+{% endblock %}

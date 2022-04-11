@@ -1,9 +1,7 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
+from flask import jsonify, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from config.db import db
-from config.app import app
-from models.user import User
-
+from models import User
+from config import db, app
 import requests
 
 
@@ -21,24 +19,30 @@ def get_user_id(id):
 
 # Create a new user
 @app.route('/create', methods=['POST', 'GET'])
-def create_user(username):
-    api_request = requests.get(f"https://api.github.com/users/{username}").json()
+def create_user():
+    if request.method == 'GET':
+        return render_template('register.html')
+    
 
-    try:
-        user = User(name=api_request['name'], 
-                    login=api_request['login'],
-                    public_repos=api_request['public_repos'],
-                    followers=api_request['followers'],
-                    following=api_request['following'],
-                    )
+    if request.method == 'POST':
+        api_request = requests.get(f"https://api.github.com/users/{request.form['username']}").json()
 
-        db.session.add(user)
-        db.session.commit()
-        return redirect("/", code=302)
-        
-    except Exception as e:
-        print(e)
-        return 'Error'
+        try:
+            user = User(name=api_request['name'], 
+                        login=api_request['login'],
+                        public_repos=api_request['public_repos'],
+                        followers=api_request['followers'],
+                        following=api_request['following'],
+                        profile_image=api_request['avatar_url'],
+                        )
+
+            db.session.add(user)
+            db.session.commit()
+            return render_template('register.html')
+            
+        except Exception as e:
+            print(e)
+            return 'Error'
 
 # Update
 
@@ -69,10 +73,5 @@ def delete_user(id):
         return 'error'
 
 if __name__ == "__main__":
-    create_user('dragoleta')
-    create_user('antoniosilva27')
-    create_user('MoisesAbraao')
-    # db.create_all()
-    # db.session.add_all(users)
-    # db.session.commit()
+    db.create_all()
     app.run()
