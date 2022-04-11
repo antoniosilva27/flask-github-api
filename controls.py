@@ -1,36 +1,17 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from config.db import db
+from config.app import app
+from models.user import User
+
 import requests
-from dataclasses import dataclass
 
-app = Flask(__name__)
-app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///github.sqlite3'
-db = SQLAlchemy(app)
-
-# @app.route('/')
-# def home():
-#     return render_template('home.html')
-@dataclass
-class User(db.Model):
-    id: int
-    login: str
-    name: str
-    public_repos: int
-    followers: int
-    following: int
-
-    id = db.Column(db.Integer(), primary_key=True, auto_increment=True)
-    login = db.Column(db.String(200), unique=True)
-    name = db.Column(db.String(200))
-    public_repos = db.Column(db.Integer())
-    followers = db.Column(db.Integer())
-    following = db.Column(db.Integer())
 
 @app.route('/')
 @app.route('/users/')
 def users():
     users = User.query.all()
-    return render_template('users.html', users=users)
+    return render_template('home.html', users=users)
 
 #  Get user by id
 @app.route('/user/<id>', methods=['GET'])
@@ -39,7 +20,7 @@ def get_user_id(id):
     return jsonify(user)
 
 # Create a new user
-@app.route('/create', methods=['POST'])
+@app.route('/create', methods=['POST', 'GET'])
 def create_user(username):
     api_request = requests.get(f"https://api.github.com/users/{username}").json()
 
@@ -53,7 +34,7 @@ def create_user(username):
 
         db.session.add(user)
         db.session.commit()
-        return jsonify(user)
+        return redirect("/", code=302)
         
     except Exception as e:
         print(e)
@@ -83,12 +64,14 @@ def delete_user(id):
     try:
         db.session.delete(user)
         db.session.commit()
-        return users()
+        return redirect("/", code=302)
     except Exception as e:
-        flash('Error', e)
+        return 'error'
 
 if __name__ == "__main__":
     create_user('dragoleta')
+    create_user('antoniosilva27')
+    create_user('MoisesAbraao')
     # db.create_all()
     # db.session.add_all(users)
     # db.session.commit()
