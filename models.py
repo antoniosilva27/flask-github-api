@@ -10,7 +10,7 @@ class User(db.Model):
     followers: int
     following: int
     profile_image: str
-    
+    html_url: str
 
     id = db.Column(db.Integer, primary_key=True, auto_increment=True)
     login = db.Column(db.String(200), unique=True)
@@ -19,5 +19,4 @@ class User(db.Model):
     followers = db.Column(db.Integer)
     following = db.Column(db.Integer)
     profile_image = db.Column(db.String)
-
-
+    html_url = db.Column(db.String)

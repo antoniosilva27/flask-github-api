@@ -34,6 +34,7 @@ def create_user():
                         followers=api_request['followers'],
                         following=api_request['following'],
                         profile_image=api_request['avatar_url'],
+                        html_url=api_request['html_url']
                         )
 
             db.session.add(user)
@@ -41,26 +42,36 @@ def create_user():
             return render_template('register.html')
             
         except Exception as e:
-            print(e)
-            return 'Error'
+            return f'{e}'
 
 # Update
 
-@app.route('/user/<id>', methods=['PUT'])
+@app.route('/update/<id>', methods=['PUT', 'GET'])
 def update_user(id):
     user = User.query.filter_by(id=id).first()
-    body = request.get_json()
-    try:
-        if ('name' in body):
-            user.name = body['name']
-        if ('login' in body):    
-            user.login = body['login']
+    api_request = requests.get(f"https://api.github.com/users/{user.login}").json()
 
-        db.session.add(user)
+    try:
+        if ('name' in api_request):
+            user.name = api_request['name']
+        if ('login' in api_request):    
+            user.login = api_request['login']
+        if ('public_repos' in api_request):
+            user.public_repos = api_request['public_repos']
+        if ('followers' in api_request):
+            user.followers = api_request['followers']
+        if ('following' in api_request):
+            user.following = api_request['following'] 
+        if ('profile_image' in api_request):
+            user.profile_image = api_request['avatar_url']
+        if ('html_url' in api_request):
+            user.html_url = api_request['html_url']
+            
         db.session.commit()
+        return redirect("/", code=302)
     except Exception as e:
         print(e)
-        return 'Error'
+        return f'Error {e}'
 
 @app.route('/delete/<int:id>', methods=['DELETE', 'GET'])
 def delete_user(id):
