@@ -40,6 +40,7 @@ def create_user():
             return render_template('register.html')
             
         except Exception as e:
+            print(e)
             message = 'User already inserted into database'
             return render_template('register.html', message=message)
 
@@ -81,6 +82,7 @@ def delete_user(id):
         db.session.commit()
         return redirect("/", code=302)
     except Exception as e:
+        print(e)
         message = 'User already deleted'
         return redirect("/", code=302, message=message)
 
