@@ -8,10 +8,10 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2>User <b>Management</b></h2>
+                        <h2><b> User Management </b></h2>
                     </div>
                     <div class="col-sm-7">
-                        <a href="{{ url_for('create_user') }}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>					
+                        <a href="{{ url_for('create_user') }}" class="btn btn-secondary"><span>Add New User</span></a>					
                     </div>
                 </div>
             </div>
@@ -37,32 +37,13 @@
                         <td>{{ user.followers }}</td>
 						<td>{{ user.following }}</td>
                         <td>
-                            <a href="{{ url_for('update_user', id=user.id) }}" class="settings" title="Update" data-toggle="tooltip"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                              </svg></a>
-                              <a href="" class="settings" title="Update" data-toggle="tooltip"></a>
-                            <a href="{{ url_for('delete_user', id=user.id) }}" class="delete" title="Delete" data-toggle="tooltip"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                              </svg></a>
+                            <a href="{{ url_for('update_user', id=user.id) }}" class="settings" title="Update" data-toggle="tooltip"><i class="fa fa-refresh"></i></a>
+                            <a href="{{ url_for('delete_user', id=user.id) }}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-remove"></i></a>
                         </td>
                     </tr>
                 </tbody>
 				{% endfor %}
             </table>
-            <div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
-            </div>
         </div>
     </div>
 </div>     
