@@ -22,11 +22,9 @@ def get_user_id(id):
 def create_user():
     if request.method == 'GET':
         return render_template('register.html')
-    
 
     if request.method == 'POST':
         api_request = requests.get(f"https://api.github.com/users/{request.form['username']}").json()
-
         try:
             user = User(name=api_request['name'], 
                         login=api_request['login'],
@@ -42,7 +40,8 @@ def create_user():
             return render_template('register.html')
             
         except Exception as e:
-            return f'{e}'
+            message = 'User already inserted into database'
+            return render_template('register.html', message=message)
 
 # Update
 
@@ -71,7 +70,8 @@ def update_user(id):
         return redirect("/", code=302)
     except Exception as e:
         print(e)
-        return f'Error {e}'
+        message = 'User already updated'
+        return redirect("/", code=302, message=message)
 
 @app.route('/delete/<int:id>', methods=['DELETE', 'GET'])
 def delete_user(id):
@@ -81,7 +81,8 @@ def delete_user(id):
         db.session.commit()
         return redirect("/", code=302)
     except Exception as e:
-        return 'error'
+        message = 'User already deleted'
+        return redirect("/", code=302, message=message)
 
 if __name__ == "__main__":
     db.create_all()
