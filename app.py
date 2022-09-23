@@ -1,5 +1,4 @@
 from flask import jsonify, render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
 from models import User
 from config import db, app
 import requests
@@ -73,6 +72,8 @@ def update_user(id):
         print(e)
         message = 'User already updated'
         return redirect("/", code=302, message=message)
+
+# delete
 
 @app.route('/delete/<int:id>', methods=['DELETE', 'GET'])
 def delete_user(id):
